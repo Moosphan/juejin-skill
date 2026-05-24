@@ -84,3 +84,7 @@ npm run lint
 npm test
 npm run build
 ```
+
+## License
+
+本项目基于 [MIT](./LICENSE) 协议开源。
