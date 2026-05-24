@@ -10,6 +10,8 @@ export const ENDPOINTS = {
   articleList: `${JUEJIN_API_ORIGIN}/content_api/v1/article/query_list`,
   createDraft: `${JUEJIN_API_ORIGIN}/content_api/v1/article_draft/create`,
   publishArticle: `${JUEJIN_API_ORIGIN}/content_api/v1/article/publish`,
+  imagexToken: `${JUEJIN_API_ORIGIN}/imagex/gen_token?client=web`,
+  imagexUrl: `${JUEJIN_API_ORIGIN}/imagex/get_img_url`,
   currentUser: `${JUEJIN_API_ORIGIN}/user_api/v1/user/get`
 };
 

@@ -1,8 +1,10 @@
 import fs from "node:fs/promises";
+import path from "node:path";
 
 import MarkdownIt from "markdown-it";
 
 import { DEFAULT_CATEGORY_ID, ENDPOINTS } from "./config.js";
+import { JuejinImageUploader, uploadLocalMarkdownImages } from "./image-uploader.js";
 
 const markdown = new MarkdownIt({
   html: true,
@@ -65,8 +67,19 @@ export class ArticlePublisher {
       throw new Error("Article content is required.");
     }
 
-    const summary = briefContent || deriveSummary(article.content);
-    const htmlContent = markdown.render(article.content);
+    const imageResult = filePath
+      ? await uploadLocalMarkdownImages(article.content, {
+          baseDir: path.dirname(path.resolve(filePath)),
+          uploader: new JuejinImageUploader({ client: this.client })
+        })
+      : {
+          content: article.content,
+          uploadedImages: []
+        };
+
+    const finalContent = imageResult.content;
+    const summary = briefContent || deriveSummary(finalContent);
+    const htmlContent = markdown.render(finalContent);
 
     const publishPublicly = !saveDraftOnly && allowPublicPublish;
     if (!saveDraftOnly && !allowPublicPublish) {
@@ -86,7 +99,7 @@ export class ArticlePublisher {
       brief_content: summary,
       edit_type: 10,
       html_content: htmlContent,
-      mark_content: article.content,
+      mark_content: finalContent,
       theme_ids: []
     });
 
@@ -103,6 +116,7 @@ export class ArticlePublisher {
       return {
         success: true,
         draftId,
+        uploadedImages: imageResult.uploadedImages,
         message: `Draft created successfully: ${draftId}`
       };
     }
@@ -125,6 +139,7 @@ export class ArticlePublisher {
           success: true,
           articleId,
           url: `https://juejin.cn/post/${articleId}`,
+          uploadedImages: imageResult.uploadedImages,
           message: "Article published successfully."
         }
       : {

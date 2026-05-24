@@ -5,6 +5,7 @@ export * from "./downloader.js";
 export * from "./fs.js";
 export * from "./hot.js";
 export * from "./http.js";
+export * from "./image-uploader.js";
 export * from "./publisher.js";
 export * from "./session-store.js";
 export * from "./utils.js";
