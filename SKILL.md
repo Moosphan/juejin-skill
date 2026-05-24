@@ -13,6 +13,7 @@ description: 当用户需要查询掘金分类或热榜、登录掘金、发布 
 - 获取全站或指定分类热榜
 - 通过 Playwright 登录并保存本地会话
 - 将 Markdown 文件发布到掘金，默认仅创建草稿
+- 用 Markdown 更新已发布文章，默认仅更新草稿
 - 下载单篇掘金文章或作者文章归档为 Markdown
 
 ## 安全约束
@@ -26,7 +27,8 @@ description: 当用户需要查询掘金分类或热榜、登录掘金、发布 
 1. 如果任务需要账号能力，先执行 `juejin-skill login`。
 2. 查询类任务优先使用 `categories`、`tags`、`hot`。
 3. 发布类任务中，如果用户未指定分类，先读取文章标题和正文内容，推荐合适的掘金分类，并在发布前向用户确认。
-4. 下载类任务优先走 API；如果详情接口失败，再使用页面回退逻辑。
+4. 更新类任务必须提供文章 URL 或 ID；默认只更新关联草稿，公开更新必须确认。
+5. 下载类任务优先走 API；如果详情接口失败，再使用页面回退逻辑。
 
 ## 常用命令
 
@@ -36,6 +38,7 @@ juejin-skill hot --category 6809637767543259144 --limit 10
 juejin-skill login
 juejin-skill publish --file ./article.md --category 6809637767543259144 --tags 6809640407484334093
 juejin-skill publish --file ./article.md
+juejin-skill update --article https://juejin.cn/post/1234567890123456789 --file ./article.md
 juejin-skill download --article https://juejin.cn/post/1234567890123456789
 ```
 

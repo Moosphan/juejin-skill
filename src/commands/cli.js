@@ -46,6 +46,9 @@ export async function runCli(argv) {
     case "publish":
       await handlePublish(rest);
       return;
+    case "update":
+      await handleUpdate(rest);
+      return;
     case "tags":
       await handleTags(rest);
       return;
@@ -64,6 +67,7 @@ Usage:
   juejin-skill hot [--category id] [--sort hot|latest|threeDays|sevenDays|thirtyDays|history] [--limit 10] [--json]
   juejin-skill tags [--category id] [--keyword text] [--limit 20] [--json]
   juejin-skill publish --file article.md [--title text] [--category id] [--tags id1,id2] [--brief text] [--cover url] [--publish] [--confirm-publish]
+  juejin-skill update --article urlOrId --file article.md [--title text] [--brief text] [--cover url] [--publish] [--confirm-publish]
   juejin-skill download --article urlOrId [--output-dir dir] [--download-images]
   juejin-skill download-user --user urlOrId [--output-dir dir] [--max-count 20] [--download-images]
 `);
@@ -213,6 +217,41 @@ async function handlePublish(args) {
   }, true);
 }
 
+async function handleUpdate(args) {
+  const options = parseOptions(args);
+  if (!options.article) {
+    throw new Error("--article is required for update");
+  }
+
+  if (!options.file) {
+    throw new Error("--file is required for update");
+  }
+
+  const store = new SessionStore({ filePath: options["cookie-path"] });
+  const cookie = await resolveCookie(options, store);
+  if (!cookie) {
+    throw new Error("No Juejin cookie found. Run `juejin-skill login` first.");
+  }
+
+  const publishRequested = Boolean(options.publish);
+  const publishConfirmed = Boolean(options["confirm-publish"]) || process.env.JUEJIN_CONFIRM_PUBLISH === "1";
+  const publisher = new ArticlePublisher({
+    client: new JuejinHttpClient({ cookie })
+  });
+
+  const result = await publisher.updateMarkdown({
+    articleIdOrUrl: options.article,
+    filePath: options.file,
+    title: options.title || "",
+    briefContent: options.brief || "",
+    coverImage: options.cover,
+    saveDraftOnly: !publishRequested,
+    allowPublicPublish: publishRequested && publishConfirmed
+  });
+
+  printData(result, true);
+}
+
 async function handleDownload(args) {
   const options = parseOptions(args);
   if (!options.article) {
@@ -316,6 +355,8 @@ export async function runNaturalLanguagePrompt({
     content = "Run `juejin-skill categories --json` and summarize the categories.";
   } else if (normalized.includes("热门") || normalized.includes("热榜")) {
     content = "Run `juejin-skill hot --limit 10` and summarize the ranking.";
+  } else if (normalized.includes("更新") || normalized.includes("编辑")) {
+    content = "Run `juejin-skill update --article <url-or-id> --file <path-to-markdown>` after making sure the user confirmed whether to update the published article publicly.";
   } else if (normalized.includes("发布")) {
     content = "Run `juejin-skill publish --file <path-to-markdown>` after making sure the user confirmed the category, tags, and whether to publish publicly.";
   } else if (normalized.includes("下载")) {

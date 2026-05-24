@@ -9,6 +9,7 @@ export const ENDPOINTS = {
   articleDetail: `${JUEJIN_API_ORIGIN}/content_api/v1/article/detail`,
   articleList: `${JUEJIN_API_ORIGIN}/content_api/v1/article/query_list`,
   createDraft: `${JUEJIN_API_ORIGIN}/content_api/v1/article_draft/create`,
+  updateDraft: `${JUEJIN_API_ORIGIN}/content_api/v1/article_draft/update`,
   publishArticle: `${JUEJIN_API_ORIGIN}/content_api/v1/article/publish`,
   imagexToken: `${JUEJIN_API_ORIGIN}/imagex/gen_token?client=web`,
   imagexUrl: `${JUEJIN_API_ORIGIN}/imagex/get_img_url`,
