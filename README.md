@@ -91,6 +91,12 @@ npm test
 npm run build
 ```
 
+## 免责声明
+
+本仓库并非掘金、Codex 或 Claude Code 官方出品的 Skill，仅作为个人项目用于学习、研究与技术交流。
+
+使用本仓库时，请自行评估相关平台规则、账号安全与内容发布风险。
+
 ## License
 
 本项目基于 [MIT](./LICENSE) 协议开源。
