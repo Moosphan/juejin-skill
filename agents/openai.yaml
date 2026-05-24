@@ -1,0 +1,7 @@
+interface:
+  display_name: "Juejin Skill"
+  short_description: "Browse, publish, and download Juejin content"
+  default_prompt: "Use $juejin-skill to browse Juejin hot posts, publish Markdown, or download articles."
+
+policy:
+  allow_implicit_invocation: true

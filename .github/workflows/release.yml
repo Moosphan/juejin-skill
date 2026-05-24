@@ -1,0 +1,62 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run checks
+        run: npm run check
+
+      - name: Build release bundles
+        run: npm run build
+
+      - name: Render release notes
+        run: npm run release:notes
+
+      - name: Upload Codex bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: juejin-skill-codex
+          path: dist/codex/juejin-skill
+
+      - name: Upload Claude bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: juejin-skill-claude
+          path: dist/claude/juejin-skill
+
+      - name: Create release archives
+        run: |
+          cd dist/codex && tar -czf ../juejin-skill-codex.tar.gz juejin-skill
+          cd ../claude && tar -czf ../juejin-skill-claude.tar.gz juejin-skill
+
+      - name: Publish GitHub release assets
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: dist/release-notes.md
+          files: |
+            dist/juejin-skill-codex.tar.gz
+            dist/juejin-skill-claude.tar.gz
