@@ -23,12 +23,14 @@ export class HotArticleService {
       limit
     });
 
-    return (response?.data || []).map((tag) => ({
-      tagId: tag.tag_id,
-      tagName: tag.tag_name,
-      postArticleCount: tag.post_article_count,
-      concernCount: tag.concern_num
-    }));
+    return (response?.data || [])
+      .map((tag) => ({
+        tagId: tag.tag_id || "",
+        tagName: tag.tag_name || "",
+        postArticleCount: tag.post_article_count || 0,
+        concernCount: tag.concern_num || tag.concern_user_count || 0
+      }))
+      .filter((tag) => tag.tagId && tag.tagName);
   }
 
   async getHotArticles({

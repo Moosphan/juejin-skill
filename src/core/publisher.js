@@ -32,9 +32,10 @@ export class ArticlePublisher {
 
     return (response?.data || [])
       .map((tag) => ({
-        tagId: tag.tag_id,
-        tagName: tag.tag_name
+        tagId: tag.tag_id || "",
+        tagName: tag.tag_name || ""
       }))
+      .filter((tag) => tag.tagId && tag.tagName)
       .filter((tag) => !keyword || tag.tagName.toLowerCase().includes(keyword.toLowerCase()));
   }
 

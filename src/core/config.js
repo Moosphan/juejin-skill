@@ -3,7 +3,7 @@ export const JUEJIN_API_ORIGIN = "https://api.juejin.cn";
 
 export const ENDPOINTS = {
   categories: `${JUEJIN_API_ORIGIN}/tag_api/v1/query_category_briefs`,
-  categoryTags: `${JUEJIN_API_ORIGIN}/tag_api/v1/query_category_tags`,
+  categoryTags: `${JUEJIN_API_ORIGIN}/recommend_api/v1/tag/recommend_tag_list`,
   recommendAll: `${JUEJIN_API_ORIGIN}/recommend_api/v1/article/recommend_all_feed`,
   recommendCategory: `${JUEJIN_API_ORIGIN}/recommend_api/v1/article/recommend_cate_feed`,
   articleDetail: `${JUEJIN_API_ORIGIN}/content_api/v1/article/detail`,
