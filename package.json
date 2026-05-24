@@ -1,6 +1,6 @@
 {
   "name": "juejin-skill",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Dual-platform Juejin skill for Codex and Claude Code",
   "type": "module",
   "private": false,
