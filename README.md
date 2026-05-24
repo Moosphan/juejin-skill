@@ -1,5 +1,7 @@
 # Juejin Skill
 
+![Juejin Skill Banner](./assets/juejin-skill-banner.png)
+
 `Juejin Skill` 是一套面向 `Codex` 与 `Claude Code` 的掘金自动化文章获取和发布工具，提供统一的 JavaScript 运行时与双平台安装产物。
 
 ## 功能
